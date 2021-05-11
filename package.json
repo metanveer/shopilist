@@ -20,11 +20,12 @@
     "start": "node server/server",
     "server": "nodemon server/server",
     "client": "npm start --prefix client",
-    "dev": "concurrently 'npm run server' 'npm run client'"
+    "dev": "concurrently 'npm run server' 'npm run client'",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/metanveer/shopiplanner.git"
+    "url": "git+https://github.com/metanveer/shopilist.git"
   },
   "keywords": [
     "shopping",
@@ -34,7 +35,7 @@
   "author": "Tanveer Hossain",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/metanveer/shopiplanner/issues"
+    "url": "https://github.com/metanveer/shopilist/issues"
   },
-  "homepage": "https://github.com/metanveer/shopiplanner#readme"
+  "homepage": "https://github.com/metanveer/shopilist#readme"
 }
