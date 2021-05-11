@@ -1,0 +1,40 @@
+{
+  "dependencies": {
+    "axios": "^0.21.1",
+    "bcrypt": "^5.0.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-async-handler": "^1.1.4",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.12.5"
+  },
+  "name": "shopilist",
+  "version": "1.0.0",
+  "description": "Ultimate shopping list app",
+  "main": "server.js",
+  "type": "module",
+  "devDependencies": {
+    "concurrently": "^6.0.2"
+  },
+  "scripts": {
+    "start": "node server/server",
+    "server": "nodemon server/server",
+    "client": "npm start --prefix client",
+    "dev": "concurrently 'npm run server' 'npm run client'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/metanveer/shopiplanner.git"
+  },
+  "keywords": [
+    "shopping",
+    "list",
+    "app"
+  ],
+  "author": "Tanveer Hossain",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/metanveer/shopiplanner/issues"
+  },
+  "homepage": "https://github.com/metanveer/shopiplanner#readme"
+}
