@@ -28,12 +28,8 @@ import { deleteDocument } from "../../contexts/DocumentContext";
 
 const ViewList = () => {
   const dispatch = useDocumentDispatch();
-  const {
-    loading,
-    message,
-    errorMessage,
-    currentDocument,
-  } = useDocumentState();
+  const { loading, message, errorMessage, currentDocument } =
+    useDocumentState();
   const { token } = useAuthState();
 
   const { id } = useParams();
@@ -92,6 +88,19 @@ const ViewList = () => {
     }
   }
 
+  function getDate() {
+    return new Date(currentDocument.createdAt).toDateString();
+  }
+
+  function getTime() {
+    return new Date(currentDocument.createdAt)
+      .toLocaleTimeString(navigator.language, {
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+      .replace(/^0(?:0:0?)?/, "");
+  }
+
   return (
     <>
       {loading ? (
@@ -113,7 +122,7 @@ const ViewList = () => {
             </Card>
             <Card>
               <Name>{currentDocument.title}</Name>
-              <SubName>{currentDocument.createdAt}</SubName>
+              <SubName>{`${getDate()} at ${getTime()}`}</SubName>
 
               {currentDocument.items &&
                 currentDocument.items.map((item) => (

@@ -60,10 +60,11 @@ export const SummaryValues = styled.div`
 `;
 
 export const SubName = styled.div`
-  font-weight: 300;
-  font-size: 16px;
+  font-weight: 400;
+  font-size: 14px;
   text-align: left;
   text-align: center;
+  color: ${(p) => p.theme.inputPlaceHolderTextColor};
 `;
 
 export const Border = styled.div`
