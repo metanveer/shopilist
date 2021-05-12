@@ -60,7 +60,7 @@ function Home() {
       priceActual: "",
       quantity: "",
       disc: "",
-      unit: "",
+      unit: "PC",
       isPurchased: false,
     };
     addItemToList(item);

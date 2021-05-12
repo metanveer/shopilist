@@ -43,10 +43,7 @@ const ItemCard = ({
 
   function buttonCheckedHandler() {
     if (!isPurchased) {
-      setItemPriceAct(
-        disc ? discountedPrice(priceEstimated, disc) : priceEstimated,
-        id
-      );
+      setItemPriceAct(priceEstimated, id);
       setItemIsPurchased(true, id);
       setIsExpand(true);
     }
@@ -62,7 +59,7 @@ const ItemCard = ({
       setItemPriceAct(discountedPrice(priceEstimated, disc), id);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [disc, priceEstimated]);
+  }, [disc]);
 
   function discountedPrice(price, disc) {
     const discountedPrice = price * 1 - (price * Number(disc) * 1) / 100;
@@ -108,12 +105,14 @@ const ItemCard = ({
               value={priceEstimated}
               onChange={(e) => setItemPriceEst(e.target.value, id)}
             />
+
             <PlusMinusButton
               danger={danger}
-              onClick={() => setItemQty((quantity = quantity * 1 + 1), id)}
+              onClick={() => setItemQty((quantity = quantity * 1 - 1), id)}
             >
-              <AiOutlinePlus />
+              <AiOutlineMinus />
             </PlusMinusButton>
+
             <Input
               type="number"
               placeholder="Qty"
@@ -122,12 +121,14 @@ const ItemCard = ({
               value={quantity}
               onChange={(e) => setItemQty(e.target.value, id)}
             />
+
             <PlusMinusButton
               danger={danger}
-              onClick={() => setItemQty((quantity = quantity * 1 - 1), id)}
+              onClick={() => setItemQty((quantity = quantity * 1 + 1), id)}
             >
-              <AiOutlineMinus />
+              <AiOutlinePlus />
             </PlusMinusButton>
+
             <Input
               type="text"
               placeholder="Unit"
@@ -141,10 +142,10 @@ const ItemCard = ({
               <PlusMinusButton
                 danger={danger}
                 onClick={() =>
-                  setItemPriceAct((priceActual = priceActual * 1 + 1), id)
+                  setItemPriceAct((priceActual = priceActual * 1 - 1), id)
                 }
               >
-                <AiOutlinePlus />
+                <AiOutlineMinus />
               </PlusMinusButton>
               <Input
                 name="actualPrice"
@@ -158,10 +159,10 @@ const ItemCard = ({
               <PlusMinusButton
                 danger={danger}
                 onClick={() =>
-                  setItemPriceAct((priceActual = priceActual * 1 - 1), id)
+                  setItemPriceAct((priceActual = priceActual * 1 + 1), id)
                 }
               >
-                <AiOutlineMinus />
+                <AiOutlinePlus />
               </PlusMinusButton>
 
               <div
@@ -169,9 +170,9 @@ const ItemCard = ({
               ></div>
               <PlusMinusButton
                 danger={danger}
-                onClick={() => setItemDisc((disc = disc * 1 + 1), id)}
+                onClick={() => setItemDisc((disc = disc * 1 - 1), id)}
               >
-                <AiOutlinePlus />
+                <AiOutlineMinus />
               </PlusMinusButton>
               <Input
                 type="number"
@@ -181,11 +182,12 @@ const ItemCard = ({
                 value={disc}
                 onChange={(e) => setItemDisc(e.target.value, id)}
               />
+
               <PlusMinusButton
                 danger={danger}
-                onClick={() => setItemDisc((disc = disc * 1 - 1), id)}
+                onClick={() => setItemDisc((disc = disc * 1 + 1), id)}
               >
-                <AiOutlineMinus />
+                <AiOutlinePlus />
               </PlusMinusButton>
             </Row>
           ) : null}
