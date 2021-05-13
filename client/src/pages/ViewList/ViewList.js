@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import ViewCard from "../../components/ViewCard/ViewCard";
 import {
   Card,
@@ -13,9 +13,11 @@ import {
   SummaryHeads,
   SummaryValues,
   HeadValueWrapper,
+  SmallButtonDisc,
 } from "./ViewList.elem";
 import { useParams } from "react-router";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
+import { CgMathPercent } from "react-icons/cg";
 import Message from "../../components/Message/Message";
 import decimalWithCommas from "../../utils/utils";
 import { useAuthState } from "../../contexts/AuthContext";
@@ -27,6 +29,8 @@ import {
 import { deleteDocument } from "../../contexts/DocumentContext";
 
 const ViewList = () => {
+  const [hasDiscount, setHasDiscount] = useState(false);
+
   const dispatch = useDocumentDispatch();
   const { loading, message, errorMessage, currentDocument } =
     useDocumentState();
@@ -88,12 +92,12 @@ const ViewList = () => {
     }
   }
 
-  function getDate() {
-    return new Date(currentDocument.createdAt).toDateString();
+  function getDate(timestamp) {
+    return new Date(timestamp).toDateString();
   }
 
-  function getTime() {
-    return new Date(currentDocument.createdAt)
+  function getTime(timestamp) {
+    return new Date(timestamp)
       .toLocaleTimeString(navigator.language, {
         hour: "2-digit",
         minute: "2-digit",
@@ -116,13 +120,24 @@ const ViewList = () => {
               <RoundLinkSmall to={`/edit/${id}`}>
                 <AiOutlineEdit />
               </RoundLinkSmall>
+              <SmallButtonDisc
+                onClick={() => setHasDiscount(!hasDiscount)}
+                active={hasDiscount}
+              >
+                <CgMathPercent />
+              </SmallButtonDisc>
               <SmallButton onClick={handleDeleteList}>
                 <AiOutlineDelete />
               </SmallButton>
             </Card>
             <Card>
               <Name>{currentDocument.title}</Name>
-              <SubName>{`${getDate()} at ${getTime()}`}</SubName>
+              <SubName>{`${getDate(currentDocument.createdAt)} at ${getTime(
+                currentDocument.createdAt
+              )}`}</SubName>
+              <SubName>{`Last updated: ${getDate(
+                currentDocument.updatedAt
+              )} at ${getTime(currentDocument.updatedAt)}`}</SubName>
 
               {currentDocument.items &&
                 currentDocument.items.map((item) => (
@@ -130,6 +145,7 @@ const ViewList = () => {
                     key={item.id}
                     {...item}
                     currentDocument={currentDocument}
+                    hasDiscount={hasDiscount}
                   />
                 ))}
               <ViewListSummary>

@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import decimalWithCommas from "../../utils/utils";
+
 import {
   Input,
   Card,
@@ -28,6 +29,7 @@ const EditList = ({
     useContext(ShoppingListContext);
   const history = useHistory();
   const [isExpandAll, setIsExpandAll] = useState(false);
+
   const dispatch = useDocumentDispatch();
   const { user, token } = useAuthState();
 
@@ -63,6 +65,7 @@ const EditList = ({
             <SmallButton onClick={() => setIsExpandAll(!isExpandAll)}>
               {isExpandAll ? <BiChevronsUp /> : <BiChevronsDown />}
             </SmallButton>
+
             <SmallButtonCross onClick={handleClearShoppingList}>
               <CgClose />
             </SmallButtonCross>

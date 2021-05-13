@@ -4,13 +4,16 @@ import { BsChevronDown, BsChevronUp } from "react-icons/bs";
 import { MdCheckCircle, MdRadioButtonUnchecked } from "react-icons/md";
 import { ShoppingListContext } from "../../contexts/ShoppingListContext";
 import decimalWithCommas from "../../utils/utils";
+import { CgMathPercent } from "react-icons/cg";
 import {
   Card,
   Input,
   SmallButton,
   PlusMinusButton,
   Text,
+  TextSpan,
   Row,
+  SmallButtonDisc,
 } from "./ItemCard.elem";
 
 const ItemCard = ({
@@ -36,6 +39,7 @@ const ItemCard = ({
   } = useContext(ShoppingListContext);
 
   const [isExpand, setIsExpand] = useState(false);
+  const [hasDiscount, setHasDiscount] = useState(false);
 
   useEffect(() => {
     setIsExpand(isExpandAll);
@@ -43,14 +47,12 @@ const ItemCard = ({
 
   function buttonCheckedHandler() {
     if (!isPurchased) {
-      setItemPriceAct(priceEstimated, id);
       setItemIsPurchased(true, id);
-      setIsExpand(true);
     }
 
     if (isPurchased) {
-      setItemPriceAct("", id);
       setItemIsPurchased(false, id);
+      setItemPriceAct("", id);
     }
   }
 
@@ -58,6 +60,7 @@ const ItemCard = ({
     if (disc >= 0) {
       setItemPriceAct(discountedPrice(priceEstimated, disc), id);
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [disc]);
 
@@ -66,7 +69,7 @@ const ItemCard = ({
     return discountedPrice;
   }
 
-  const danger = priceActual > priceEstimated ? "danger" : null;
+  const danger = priceActual * 1 > priceEstimated * 1 ? "danger" : null;
 
   return (
     <Card danger={danger}>
@@ -79,11 +82,12 @@ const ItemCard = ({
           {isPurchased ? <MdCheckCircle /> : <MdRadioButtonUnchecked />}
         </SmallButton>
         <Input
+          style={{ margin: "0 10px" }}
           width="250px"
           type="text"
           placeholder="What to buy?"
           value={name}
-          maxLength="17"
+          maxLength="80"
           onChange={(e) => setItemName(e.target.value, id)}
         />
         <SmallButton danger={danger} onClick={() => removeItem(id)}>
@@ -97,11 +101,11 @@ const ItemCard = ({
         <>
           <Row danger={danger}>
             <Input
-              width="200%"
+              width="70px"
               type="number"
               min={0}
               max={99999}
-              placeholder="Est. unit price"
+              placeholder="Budget"
               value={priceEstimated}
               onChange={(e) => setItemPriceEst(e.target.value, id)}
             />
@@ -114,6 +118,7 @@ const ItemCard = ({
             </PlusMinusButton>
 
             <Input
+              width="50px"
               type="number"
               placeholder="Qty"
               min={0}
@@ -130,65 +135,71 @@ const ItemCard = ({
             </PlusMinusButton>
 
             <Input
+              width="50px"
               type="text"
               placeholder="Unit"
               value={unit}
               maxLength="12"
               onChange={(e) => setItemUnit(e.target.value, id)}
             />
+            {isPurchased && (
+              <SmallButtonDisc
+                onClick={() => setHasDiscount(!hasDiscount)}
+                active={hasDiscount}
+              >
+                <CgMathPercent />
+              </SmallButtonDisc>
+            )}
           </Row>
           {isPurchased ? (
             <Row danger={danger}>
-              <PlusMinusButton
-                danger={danger}
-                onClick={() =>
-                  setItemPriceAct((priceActual = priceActual * 1 - 1), id)
-                }
-              >
-                <AiOutlineMinus />
-              </PlusMinusButton>
-              <Input
-                name="actualPrice"
-                type="number"
-                min={0}
-                max={99999}
-                placeholder="Act. price"
-                value={priceActual}
-                onChange={(e) => setItemPriceAct(e.target.value, id)}
-              />
-              <PlusMinusButton
-                danger={danger}
-                onClick={() =>
-                  setItemPriceAct((priceActual = priceActual * 1 + 1), id)
-                }
-              >
-                <AiOutlinePlus />
-              </PlusMinusButton>
+              {!hasDiscount && (
+                <>
+                  <TextSpan>Actual cost </TextSpan>
+                  <Input
+                    width="100px"
+                    name="actualPrice"
+                    type="number"
+                    min={0}
+                    max={99999}
+                    placeholder="Act. price"
+                    value={priceActual === 0 ? null : priceActual}
+                    onChange={(e) => setItemPriceAct(e.target.value, id)}
+                  />
+                </>
+              )}
+              {hasDiscount && (
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <TextSpan>Disc.</TextSpan>
+                  <PlusMinusButton
+                    danger={danger}
+                    onClick={() => setItemDisc((disc = disc * 1 - 1), id)}
+                  >
+                    <AiOutlineMinus />
+                  </PlusMinusButton>
+                  <Input
+                    width="50px"
+                    type="number"
+                    placeholder="Disc."
+                    min={0}
+                    max={99}
+                    value={disc}
+                    onChange={(e) => setItemDisc(e.target.value, id)}
+                  />
 
-              <div
-                style={{ borderRight: "1px solid #ccc", margin: "8px 0" }}
-              ></div>
-              <PlusMinusButton
-                danger={danger}
-                onClick={() => setItemDisc((disc = disc * 1 - 1), id)}
-              >
-                <AiOutlineMinus />
-              </PlusMinusButton>
-              <Input
-                type="number"
-                placeholder="Discount"
-                min={0}
-                max={99}
-                value={disc}
-                onChange={(e) => setItemDisc(e.target.value, id)}
-              />
-
-              <PlusMinusButton
-                danger={danger}
-                onClick={() => setItemDisc((disc = disc * 1 + 1), id)}
-              >
-                <AiOutlinePlus />
-              </PlusMinusButton>
+                  <PlusMinusButton
+                    danger={danger}
+                    onClick={() => setItemDisc((disc = disc * 1 + 1), id)}
+                  >
+                    <AiOutlinePlus />
+                  </PlusMinusButton>
+                </div>
+              )}
+              {hasDiscount && (
+                <TextSpan>
+                  Cost/{unit} TK {decimalWithCommas(priceActual)}
+                </TextSpan>
+              )}
             </Row>
           ) : null}
 
@@ -199,11 +210,11 @@ const ItemCard = ({
               </Text>
               <Text>
                 {quantity * priceEstimated
-                  ? `Est TK ${decimalWithCommas(quantity * priceEstimated)}`
+                  ? `Budget TK ${decimalWithCommas(quantity * priceEstimated)}`
                   : null}
               </Text>
               {quantity * priceActual ? (
-                <Text>{`Act TK ${decimalWithCommas(
+                <Text>{`Cost TK ${decimalWithCommas(
                   quantity * priceActual
                 )}`}</Text>
               ) : null}

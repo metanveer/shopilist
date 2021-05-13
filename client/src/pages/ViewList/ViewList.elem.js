@@ -12,6 +12,25 @@ export const Card = styled.div`
   transition: all 0.2s linear;
 `;
 
+export const SmallButtonDisc = styled.button`
+  outline: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  width: 31px;
+  height: 31px;
+  border-radius: 50%;
+  font-size: 20px;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: ${(p) => (!p.active ? p.theme.discText : p.theme.inputBg)};
+  background-color: ${(p) =>
+    !p.active ? p.theme.inputBg : p.theme.inputPlaceHolderTextColor};
+`;
+
 export const Name = styled.div`
   padding: 5px 5px 0 5px;
   font-weight: 700;

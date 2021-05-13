@@ -1,32 +1,39 @@
 import decimalWithCommas from "../../utils/utils";
+import { useState, useEffect } from "react";
 import {
   Card,
-  RightContent,
   ItemNum,
-  LeftContainer,
   Name,
   Comment,
   SubName,
   SubNameAct,
   Border,
+  LeftContainer,
+  RightContent,
 } from "./ViewCard.elem";
 
 const ViewCard = ({
   id,
   name,
-  priceEstimated = 0,
-  priceActual = 0,
-  quantity = 0,
-  disc = 0,
-  isPurchased = false,
-  unit = "PC",
+  priceEstimated,
+  priceActual,
+  quantity,
+  isPurchased,
+  unit,
   currentDocument,
+  hasDiscount,
 }) => {
+  const [showDiscount, setShowDiscount] = useState(false);
+
+  useEffect(() => {
+    setShowDiscount(hasDiscount);
+  }, [hasDiscount]);
+
   function getItemComment() {
     if (priceEstimated > priceActual) {
       return `Saved TK ${decimalWithCommas(
         (priceEstimated - priceActual) * quantity
-      )} | Disc ${disc}%`;
+      )} | Disc ${getDiscountPercent(priceEstimated, priceActual)}%`;
     }
 
     if (priceEstimated < priceActual) {
@@ -37,35 +44,55 @@ const ViewCard = ({
     return "Nothing saved!";
   }
 
+  function getDiscountPercent(priceEstimated, priceActual) {
+    return decimalWithCommas(
+      (((priceEstimated - priceActual) * 100) / priceEstimated) * 1
+    );
+  }
+
+  const discount = getDiscountPercent(priceEstimated, priceActual);
+
+  const budgetOrMRP = showDiscount ? "MRP" : "Budget";
+
   const itemSerialNo =
     currentDocument.items.findIndex((item) => item.id === id) + 1;
   return (
-    <Card longHeight={isPurchased}>
+    <Card>
       <LeftContainer>
         <ItemNum>{itemSerialNo}</ItemNum>
       </LeftContainer>
 
       <RightContent>
-        <Name>{name}</Name>
+        <Name>
+          {name} {quantity} {unit}
+        </Name>
         <Border />
         <SubName>
-          {quantity} {unit} at est. TK {decimalWithCommas(priceEstimated)} per{" "}
-          {unit}
+          {budgetOrMRP} TK {decimalWithCommas(priceEstimated)}/{unit}
         </SubName>
         <SubName>
-          Total est. TK {decimalWithCommas(priceEstimated * quantity)}
+          Total {budgetOrMRP} TK {decimalWithCommas(priceEstimated * quantity)}
         </SubName>
         {isPurchased ? (
           <>
             <Border />
-            <SubNameAct>
-              Purchase price {decimalWithCommas(priceActual)} per {unit}
-            </SubNameAct>
-            <SubNameAct>
-              Total act. cost TK {decimalWithCommas(priceActual * quantity)}
-            </SubNameAct>
+            {!showDiscount ? (
+              <SubNameAct>
+                Purchased at TK {decimalWithCommas(priceActual)} per {unit}
+              </SubNameAct>
+            ) : null}
+            {showDiscount && discount > 0 ? (
+              <SubNameAct>
+                Discounted total TK {decimalWithCommas(priceActual * quantity)}{" "}
+                | Disc: {discount}%
+              </SubNameAct>
+            ) : (
+              <SubNameAct>
+                Total actual cost TK {decimalWithCommas(priceActual * quantity)}
+              </SubNameAct>
+            )}
 
-            {getItemComment() && (
+            {!showDiscount && getItemComment() && (
               <>
                 <Border />
                 <Comment>{getItemComment()}</Comment>
@@ -75,7 +102,7 @@ const ViewCard = ({
         ) : (
           <>
             <Border />
-            <Comment>Not purchased!</Comment>
+            <Comment>Not purchased</Comment>
           </>
         )}
       </RightContent>

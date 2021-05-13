@@ -45,8 +45,8 @@ export const Input = styled.input`
 export const Row = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  align-items: stretch;
+  justify-content: center;
+  align-items: center;
   border-bottom: 1px solid
     ${(p) => (p.danger ? `${p.theme.borderDanger}` : `${p.theme.border}`)};
   padding: 5px;
@@ -61,13 +61,11 @@ export const Text = styled.div`
   flex: 1 0 90px;
   color: ${(p) => p.theme.text};
 `;
-
-export const InputWrapper = styled.div`
+export const TextSpan = styled.span`
+  padding: 4px;
   color: ${(p) => p.theme.text};
-  font-weight: 400;
-  font-size: 1.6rem;
-  margin: 0 5px;
 `;
+
 export const Label = styled.label`
   color: ${(p) => p.theme.text};
   font-weight: 400;
@@ -94,6 +92,27 @@ export const SmallButton = styled.button`
       p.danger ? `${p.theme.itemCardDanger}` : `${p.theme.cardBg}`};
   }
 `;
+
+export const SmallButtonDisc = styled.button`
+  outline: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  width: 31px;
+  height: 31px;
+  border-radius: 50%;
+  font-size: 20px;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: ${(p) => (!p.active ? p.theme.discText : p.theme.inputBg)};
+  background-color: ${(p) =>
+    !p.active ? p.theme.inputBg : p.theme.inputPlaceHolderTextColor};
+`;
+
+export const Discount = styled.div``;
 
 export const PlusMinusButton = styled.button`
   color: ${(p) => p.theme.smBtnText};

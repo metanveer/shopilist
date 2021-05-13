@@ -56,6 +56,7 @@ export const SmallButton = styled.button`
   right: 37px;
   transition: all 0.2s linear;
 `;
+
 export const SmallButtonCross = styled.button`
   color: ${(p) => p.theme.text};
   font-size: 20px;
